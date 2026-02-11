@@ -1,6 +1,7 @@
 import './App.css'
 import { useState } from 'react'
 
+
 export default function App() {
 
   const [contacts, setContacts] = useState([
@@ -19,9 +20,17 @@ export default function App() {
     setContacts(contacts => [...contacts, input])
   }
 
+  function Limpar(){
+    setInput({
+    nome: '',
+    email: '',
+    telefone: ''
+  })
+  }
+
   return (
 
-    <main>
+    <>
       <nav>
         <div className="nav-img">
           <img src="./src/img/contacts_icon.png" alt="contats_icon" />
@@ -115,13 +124,13 @@ export default function App() {
             <p className="button-text" >Salvar Contato</p>
           </button>
 
-          <button className="aside-clean">Limpar os campos</button>
+          <button className="aside-clean" onClick={Limpar}>Limpar os campos</button>
 
           
 
         </aside>
       </menu>
-    </main>
+    </>
   )
 }
 

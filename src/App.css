@@ -1,7 +1,7 @@
-main {
+body {
+    height: 100vh auto;
+    width: 100vw auto;
     background-color: #F8FAFC ;
-    height: 100vh;
-    width: 100vw;
 }
 
 nav {
@@ -86,12 +86,13 @@ aside {
     padding: 30px;
     background-color: #FFF;
     width: 32%;
-    height: auto;
+    height: 650px;
     display: flex;
     flex-direction: column;
 
 }
 menu {
+    height: auto;
     display: flex;
     padding: 0px 40px;
 }
@@ -179,6 +180,7 @@ hr {
 
 .table-contact {
     margin: 40px -30px;
+    overflow-x: auto;
 }
 table {
     width: 100%;
@@ -239,3 +241,4 @@ tr > th {
     justify-content: space-between;
     gap: 20px;
 }
+
