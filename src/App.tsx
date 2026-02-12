@@ -2,12 +2,24 @@ import './App.css'
 import { useState } from 'react'
 
 
+
 export default function App() {
 
-  const [contacts, setContacts] = useState([
-    {nome: 'Jhon Doe', email: 'jhondoe@gmail.com', telefone: '(21) 98129-0049'},
-    {nome: 'Maria Insane', email: 'mariaInsane@gmail.com', telefone: '(21) 99149-4349'}
-])
+
+type contactsProps = {
+  nome: string
+  email: string
+  telefone: string
+}
+
+const [contacts, setContacts] = useState<contactsProps[]>([])
+const [currentPage, setCurrentPage] = useState(1)
+const contactsPerPage = 5
+const totalPages = Math.ceil(contacts.length / contactsPerPage)
+const startIndex = (currentPage - 1) * contactsPerPage
+const endIndex = startIndex + contactsPerPage
+const currentContacts = contacts.slice(startIndex, endIndex)
+
 
   const [input, setInput] = useState({
     nome: '',
@@ -18,7 +30,7 @@ export default function App() {
 
   function Salvar(){
     setContacts(contacts => [...contacts, input])
-  }
+}
 
   function Limpar(){
     setInput({
@@ -26,7 +38,15 @@ export default function App() {
     email: '',
     telefone: ''
   })
-  }
+}
+
+  function Proximo(){
+  setCurrentPage( page => page + 1)
+}
+
+  function Anterior(){
+  setCurrentPage( page => page - 1)
+}
 
   return (
 
@@ -59,7 +79,7 @@ export default function App() {
                     <th>AÇÕES</th>
                   </tr>
                 </thead>
-                {contacts.map( (contacts, index) => (
+                {currentContacts.map( (contacts, index) => (
                   <tbody key={index}>
                     <tr>
                       <td><p className="name-list">{contacts.nome}</p></td>
@@ -79,6 +99,25 @@ export default function App() {
                   </tbody>
                 ))}
               </table>
+
+              <div className="navigation-section">
+                <p className='pag-count'>Mostrando página {currentPage} de {totalPages == 0 ? '1' : `${totalPages}`} </p>
+                <div className="navigation-btn">
+                  <button
+                  type='button'
+                  disabled={currentPage === 1}
+                  onClick={Anterior}
+                  className='anterior-btn'> Anterior </button>
+                  <button
+                  type='button'
+                  disabled={currentPage === totalPages || contacts.length == 0}
+                  onClick={Proximo}
+                  className='proximo-btn'> Próximo </button>
+                </div>
+              </div>
+
+              
+              
           </div>
 
         </section>
@@ -125,8 +164,6 @@ export default function App() {
           </button>
 
           <button className="aside-clean" onClick={Limpar}>Limpar os campos</button>
-
-          
 
         </aside>
       </menu>
