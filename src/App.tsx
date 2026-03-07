@@ -27,9 +27,14 @@ const currentContacts = contacts.slice(startIndex, endIndex)
     telefone: ''
   })
   
-
+  const inputvazio = Object.values(input).every(valor => valor.trim() === '');
   function Salvar(){
-    setContacts(contacts => [...contacts, input])
+
+    if (inputvazio) {
+      alert("Preencha os dados")
+    } else {
+      setContacts(contacts => [...contacts, input])
+    }
 }
 
   function Limpar(){
@@ -49,7 +54,6 @@ const currentContacts = contacts.slice(startIndex, endIndex)
 }
 
   return (
-
     <>
       <nav>
         <div className="nav-img">
@@ -57,7 +61,6 @@ const currentContacts = contacts.slice(startIndex, endIndex)
         </div>
         <p className="nav-title">Painel de Contatos</p>
       </nav>
-
       <menu>
         <section>
           <header className="header-section">
@@ -99,29 +102,21 @@ const currentContacts = contacts.slice(startIndex, endIndex)
                   </tbody>
                 ))}
               </table>
-
+             </div>
               <div className="navigation-section">
-                <p className='pag-count'>Mostrando página {currentPage} de {totalPages == 0 ? '1' : `${totalPages}`} </p>
+                <p className='page-count'>Mostrando página <strong>{currentPage}</strong> de {totalPages == 0 ? '1' : `${totalPages}`} </p>
                 <div className="navigation-btn">
                   <button
                   type='button'
                   disabled={currentPage === 1}
-                  onClick={Anterior}
-                  className='anterior-btn'> Anterior </button>
+                  onClick={Anterior}> &larr; </button>
                   <button
                   type='button'
                   disabled={currentPage === totalPages || contacts.length == 0}
-                  onClick={Proximo}
-                  className='proximo-btn'> Próximo </button>
+                  onClick={Proximo}> &rarr; </button>
                 </div>
               </div>
-
-              
-              
-          </div>
-
         </section>
-
         <aside>
           <header className="header-aside">
             <p className="aside-title">Novo contato</p>
@@ -155,16 +150,13 @@ const currentContacts = contacts.slice(startIndex, endIndex)
             type="text"
             name="telefone"
             className="input-aside"
-            placeholder="(00) 00000-0000 "
+            placeholder="(00) 00000-0000"
           />
-
           <button className="button-add" title="add" onClick={Salvar}>
             <img src="./src/img/user_add.png" alt="add" className="button-img" />
-            <p className="button-text" >Salvar Contato</p>
+            <p className="button-text">Salvar Contato</p>
           </button>
-
           <button className="aside-clean" onClick={Limpar}>Limpar os campos</button>
-
         </aside>
       </menu>
     </>
