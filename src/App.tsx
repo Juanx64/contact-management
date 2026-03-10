@@ -1,6 +1,6 @@
 import './App.css'
 import { useState } from 'react'
-
+import toast, { Toaster } from 'react-hot-toast'
 
 
 export default function App() {
@@ -27,22 +27,41 @@ const currentContacts = contacts.slice(startIndex, endIndex)
     telefone: ''
   })
   
-  const inputvazio = Object.values(input).every(valor => valor.trim() === '');
+
+  const dadosVazios = input.nome.trim() !== '' && (input.telefone.trim() === '' && input.email.trim() === '')
+  const inputVazio = Object.values(input).every(valor => valor.trim() === '');
+  const emailInvalido = !input.email.includes("@") && input.email.trim() !== ''
+
+
   function Salvar(){
 
-    if (inputvazio) {
-      alert("Preencha os dados")
-    } else {
+    if (inputVazio) {
+      toast.error("Preencha os campos existentes!")
+    } 
+    else if (dadosVazios) {
+       toast.error("Preencha pelo menos um campo para contato!")
+    } 
+    else if (emailInvalido) {
+      toast.error("O email deve conter @ !")
+    }
+    else {
+      toast.success("Dados salvos!")
       setContacts(contacts => [...contacts, input])
     }
 }
 
   function Limpar(){
-    setInput({
-    nome: '',
-    email: '',
-    telefone: ''
-  })
+
+    if (inputVazio) {
+      toast.error("Campos já limpos")
+    } else {
+      toast.success("Campos apagados")
+      setInput({
+      nome: '',
+      email: '',
+      telefone: ''
+  })}
+  
 }
 
   function Proximo(){
@@ -55,16 +74,29 @@ const currentContacts = contacts.slice(startIndex, endIndex)
 
   return (
     <>
+    <div>
+      <Toaster
+      position='top-right'
+      toastOptions={
+        {
+          duration: 2000,
+          style: {
+            fontFamily : "Inter"
+          }
+        }
+      }
+      />
+    </div>
       <nav>
         <div className="nav-img">
           <img src="./src/img/contacts_icon.png" alt="contats_icon" />
         </div>
-        <p className="nav-title">Painel de Contatos</p>
+        <h1 className="nav-title">Painel de Contatos</h1>
       </nav>
       <menu>
         <section>
           <header className="header-section">
-            <p className="section-title">Gerenciamento de Base</p>
+            <h2 className="section-title">Gerenciamento de Base</h2>
 
             <div className="section-filtros">
               <img src="./src/img/list_filter.png" alt="filtro" />
@@ -82,9 +114,9 @@ const currentContacts = contacts.slice(startIndex, endIndex)
                     <th>AÇÕES</th>
                   </tr>
                 </thead>
+                <tbody>
                 {currentContacts.map( (contacts, index) => (
-                  <tbody key={index}>
-                    <tr>
+                    <tr key={index}>
                       <td><p className="name-list">{contacts.nome}</p></td>
                       <td>{contacts.email}</td>
                       <td>{contacts.telefone}</td>
@@ -99,8 +131,8 @@ const currentContacts = contacts.slice(startIndex, endIndex)
                         </div>
                       </td>
                     </tr>
-                  </tbody>
                 ))}
+              </tbody>
               </table>
              </div>
               <div className="navigation-section">
@@ -109,17 +141,17 @@ const currentContacts = contacts.slice(startIndex, endIndex)
                   <button
                   type='button'
                   disabled={currentPage === 1}
-                  onClick={Anterior}> &larr; </button>
+                  onClick={Anterior}><img src="./src/img/arrow_left_icon.png" alt="left"/></button>
                   <button
                   type='button'
                   disabled={currentPage === totalPages || contacts.length == 0}
-                  onClick={Proximo}> &rarr; </button>
+                  onClick={Proximo}><img src="./src/img/arrow_right_icon.png" alt="right"/></button>
                 </div>
               </div>
         </section>
         <aside>
           <header className="header-aside">
-            <p className="aside-title">Novo contato</p>
+            <h2 className="aside-title">Novo contato</h2>
           </header>
 
           <p className="aside-paragraph">Adicione um novo contato a sua lista</p>
@@ -133,6 +165,7 @@ const currentContacts = contacts.slice(startIndex, endIndex)
             name="name"
             className="input-aside"
             placeholder="Ex: Juan Riquelmi Santos Taveira"
+            required
           />
           <p className="aside-subparagraph">Email </p>
           <input
@@ -142,6 +175,7 @@ const currentContacts = contacts.slice(startIndex, endIndex)
             name="email"
             className="input-aside"
             placeholder="usuario@gmail.com"
+            required
           />
           <p className="aside-subparagraph">Telefone </p>
           <input
@@ -159,6 +193,7 @@ const currentContacts = contacts.slice(startIndex, endIndex)
           <button className="aside-clean" onClick={Limpar}>Limpar os campos</button>
         </aside>
       </menu>
+  
     </>
   )
 }
